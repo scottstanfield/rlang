@@ -1,0 +1,31 @@
+FROM clearlinux/r-base
+
+# https://nickjanetakis.com/blog/best-practices-when-it-comes-to-writing-docker-related-files
+# USER root
+
+RUN swupd bundle-add git neovim tmux zsh sysadmin-basic sudo
+
+# Essential libraries for R: https://cran.r-project.org/doc/manuals/r-release/R-admin.html
+RUN swupd clean && swupd bundle-add devpkg-zlib devpkg-bzip2 devpkg-curl devpkg-pcre xz plzip wget
+
+# 1010:1050
+
+RUN date > /tmp/timestamp
+RUN groupadd --gid 1050 -o campfire && useradd --uid 1010 --gid 1050 --create-home scott && usermod -G wheel scott
+USER 1010:1050
+WORKDIR /home/scott
+#USER scott
+
+RUN mkdir -p /home/scott/rlibs
+COPY --chown=scott:scott .Renviron .
+COPY --chown=scott:scott .Rprofile .
+COPY --chown=scott:scott install.r .
+RUN R --quiet -f install.r
+
+RUN git clone https://github.com/scottstanfield/dmz && dmz/install.sh
+RUN echo "will cite" | parallel --citation 2&> /dev/null; exit 0
+RUN date > timestamp
+RUN touch v1.1.txt
+RUN echo "v1.2 please" > v1.2.txt
+
+# CMD ["R", "--no-save"]
