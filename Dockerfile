@@ -24,5 +24,6 @@ RUN swupd clean
 RUN echo "will cite" | parallel --citation 2&> /dev/null; exit 0
 
 WORKDIR /app
+RUN echo date > timestamp
 
 CMD ["R", "--no-save"]
