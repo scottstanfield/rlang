@@ -1,27 +1,27 @@
 NAME    := scottstanfield/rlang
 # patch, minor, major
 RELEASE ?= patch
+CURRENT_VER := 1.0.4
 
 
-CURRENT_VER := $(shell git ls-remote --tags | awk '{ print $$2}'| sort -nr | head -n1|sed 's/refs\/tags\///g')
+#CURRENT_VER := $(shell git ls-remote --tags 2> /dev/null | awk '{ print $$2}'| sort -nr | head -n1|sed 's/refs\/tags\///g')
 
 ifndef CURRENT_VER
   CURRENT_VER := 1.0.0
 endif
 
-NEXT_VER := $(shell docker run --rm alpine/semver semver -c -i $(RELEASE_TYPE) $(CURRENT_VER))
+NEXT_VER := $(shell docker run --rm alpine/semver semver -c -i $(RELEASE) $(CURRENT_VER))
 
 current-version:
-	@echo $(CURRENT_VER)
+	@echo "Current: " $(CURRENT_VER)
 
 next-version:
-	@echo $(NEXT_VER)
+	@echo "Next:    "  $(NEXT_VER)
+
+versions: current-version next-version
 
 LATEST	:= ${NAME}:latest
-
-
 .DEFAULT_GOAL := build
-
 
 build:
 	$(eval IMG := ${NAME}:${CURRENT_VER})
@@ -36,12 +36,10 @@ next:
 	@docker tag ${IMG} ${LATEST}
 
 release:
-	git checkout master;
+	git checkout master
 	git tag $(NEXT_VER)
 	git push --tags
-
-push:
-	@docker push ${NAME}
+	docker push ${NAME}
 
 purge:
 	@echo "Removing stopped containers"

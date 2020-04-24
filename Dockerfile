@@ -20,6 +20,8 @@ RUN swupd bundle-add git \
     wget 
 
 RUN swupd clean
+RUN swupd bundle-add rust-basic
+RUN cargo install --root /usr/local scrubcsv xsv
 
 RUN echo "will cite" | parallel --citation 2&> /dev/null; exit 0
 
