@@ -1,7 +1,7 @@
 NAME    := scottstanfield/rlang
 # patch, minor, major
 RELEASE ?= patch
-CURRENT_VER := 1.0.4
+CURRENT_VER := 1.1.0
 
 
 #CURRENT_VER := $(shell git ls-remote --tags 2> /dev/null | awk '{ print $$2}'| sort -nr | head -n1|sed 's/refs\/tags\///g')
