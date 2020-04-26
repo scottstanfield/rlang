@@ -1,11 +1,9 @@
 NAME    := scottstanfield/rlang
 # patch, minor, major
 RELEASE ?= patch
-VERSION := 1.2.0
-
+VERSION := 1.5.0
 
 #VERSION := $(shell git ls-remote --tags 2> /dev/null | awk '{ print $$2}'| sort -nr | head -n1|sed 's/refs\/tags\///g')
-
 
 version:
 	@echo "Current: " $(VERSION)
@@ -16,7 +14,7 @@ LATEST	:= ${NAME}:latest
 build:
 	$(eval IMG := ${NAME}:${VERSION})
 	@echo "Building ${IMG}"
-	@docker build -t ${IMG} .
+	@docker build  -t ${IMG} .
 	@docker tag ${IMG} ${LATEST}
 
 release:
@@ -30,5 +28,3 @@ purge:
 	-docker rm -v $$(docker ps -a -q -f status=exited)
 	@echo "Deleting all untagged/dangling (<none>) images"
 	-docker rmi $$(docker images -q -f dangling=true)
-
-
