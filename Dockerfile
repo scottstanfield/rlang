@@ -37,10 +37,10 @@ COPY --chown=2000:1050 Rprofile .profile
 COPY --chown=2000:1050 install.r .
 RUN R --quiet -f install.r
 
-RUN touch v1.5.0.txt      # improved prompt
+RUN touch v1.6.2.txt      # improved prompt
 RUN git clone https://github.com/scottstanfield/dmz && dmz/install.sh
 
-RUN pip install numpy click
+RUN pip install -U numpy click radian
 
 RUN echo "path=(/app/bin \$path)" >> .zshrc
 
