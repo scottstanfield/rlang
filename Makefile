@@ -1,7 +1,7 @@
 NAME    := scottstanfield/rlang
 # patch, minor, major
 RELEASE ?= patch
-VERSION := 1.5.0
+VERSION := 1.6.0
 
 #VERSION := $(shell git ls-remote --tags 2> /dev/null | awk '{ print $$2}'| sort -nr | head -n1|sed 's/refs\/tags\///g')
 
@@ -16,6 +16,9 @@ build:
 	@echo "Building ${IMG}"
 	@docker build  -t ${IMG} .
 	@docker tag ${IMG} ${LATEST}
+
+run:
+	@docker run --rm -it ${LATEST} zsh
 
 release:
 	git checkout master
