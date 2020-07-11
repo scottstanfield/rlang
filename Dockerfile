@@ -16,14 +16,11 @@ RUN swupd bundle-add git \
     devpkg-pcre \
     xz \
     plzip \
-    wget 
+    wget  \
+    rust-basic 
 
 RUN swupd clean
-RUN swupd bundle-add rust-basic
 RUN cargo install --root /usr/local scrubcsv xsv
-
-RUN swupd clean
-RUN swupd bundle-add R-extras
 
 # The UID 2000 and GID of 1050 requires host account with identical settings
 RUN groupadd --gid 1050 -o campfire && \
@@ -45,8 +42,8 @@ RUN git clone https://github.com/scottstanfield/dmz && dmz/install.sh
 
 RUN pip install -U numpy click radian
 
+# ENV PATH="/app/bin:${PATH}"
 RUN echo "path=(/app/bin \$path)" >> .zshrc
-
 
 WORKDIR /app
 CMD ["R", "--no-save"]
